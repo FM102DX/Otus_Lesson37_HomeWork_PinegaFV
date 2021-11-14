@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using GuessNumberGame.Abstract;
 using GuessNumberGame.Core.GameSettings;
+using GuessNumberGame.Service;
 
 namespace GuessNumberGame.Core.GameDevices
 {
@@ -12,51 +13,38 @@ namespace GuessNumberGame.Core.GameDevices
     {
         public override string Name { get; set; } = "Sega";
 
-        public override  void Run(INumbericGame<INumbericGameSettings> game)
-        {
+        public override string AboutText { get; set; } = "This is Sega! :)";
 
+        public override ConsoleColor MyColor { get; set; } = ConsoleColor.Magenta;
+
+        public override void Run(INumbericGame<INumbericGameSettings> game)
+        {
+            base.Run(game);
             ConsoleWriter.WriteYellow("");
-            ConsoleWriter.WriteYellow("***** Привет, с вами игровая консоль Sega! *****");
-
-            while (true)
-            {
-                int menuItem = ShowMenu();
-
-                switch (menuItem)
-                {
-                    case 1:
-                        game.Start();
-                        break;
-                    case 2:
-                        Console.WriteLine("Спасибо за игру, хорошего дня!");
-                        return;
-                }
-            }
+            ConsoleWriter.WriteWithColor($"***** Привет, с вами игровая консоль {Name}! *****", MyColor);
+            AppMenuMaker menu = PrepareMenu();
+            menu.Run();
         }
 
-        static int ShowMenu()
+        internal virtual AppMenuMaker PrepareMenu()
         {
-            bool correctInput = false;
-            int rez = 0;
-            do
+            AppMenuMaker menu = new AppMenuMaker("", "");
+
+            menu.AddMenuItemDelegate(1, "Играть", () =>
             {
-                Console.WriteLine("");
-                Console.WriteLine("");
-                ConsoleWriter.WriteGreen("Выберите одно из действий (введите число):");
-                Console.WriteLine("1 - играть");
-                Console.WriteLine("2 - выход");
-                Console.WriteLine("");
+                CurrentGame.Start();
+            });
 
-                string key = Console.ReadLine().Trim();
+            menu.AddMenuItemDelegate(2, "Help&about", () =>
+            {
+                this.ShowAboutText();
+            });
 
-                if ((key == "1" || key == "2" || key == "3" || key == "4" || key == "5" || key == "6" || key == "7" || key == "8" || key == "9") && (Int32.TryParse(key, out rez)))
-                {
-                    correctInput = true;
-                }
-            }
-            while (!correctInput);
 
-            return rez;
+
+            return menu;
+
         }
+
     }
 }

@@ -6,11 +6,9 @@ using System.Threading.Tasks;
 
 namespace GuessNumberGame.Abstract
 {
-    public interface INumbericGameDevice
+    public interface ISupportColouredOutput
     {
-        public string Name { get; set; }
-        public void Run(INumbericGame<INumbericGameSettings> game);
-
-
+        public ConsoleColor MyColor { get; set; }
+       
     }
 }

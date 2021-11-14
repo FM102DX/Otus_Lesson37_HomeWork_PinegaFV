@@ -1,18 +1,19 @@
-﻿using GuessNumberGame.Abstract;
+﻿using GuessNumberGame;
+using GuessNumberGame.Abstract;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GuessNumberGame.Core
+namespace GuessNumberGames.Core
 {
-    public class NumbersGame<T> : INumbericGame<INumbericGameSettings> where T: INumbericGameSettings,  new()
+    public class NumbersGame<T> : INumbericGame<INumbericGameSettings>, ISupportColouredOutput where T: INumbericGameSettings,  new()
     {
-
         private int NumberOfEfforts { get; set; }
         private int MinDigit { get; set; }
         private int MaxDigit { get; set; }
+        public virtual ConsoleColor MyColor { get; set; } = ConsoleColor.White;
 
         public void Start()
         {
@@ -29,7 +30,7 @@ namespace GuessNumberGame.Core
 
                 int targetNumber = ServiceFunctions.random.Next(MinDigit, MaxDigit);
 
-                Console.WriteLine($"Система загадала число от {MinDigit} до {MaxDigit}. У вас {NumberOfEfforts} попыток");
+                ConsoleWriter.WriteWithColor($"Система загадала число от {MinDigit} до {MaxDigit}. У вас {NumberOfEfforts} попыток", MyColor);
 
                 int effortsLeft = NumberOfEfforts;
 
@@ -44,11 +45,11 @@ namespace GuessNumberGame.Core
                 {
                     int enteredNumber = 0;
 
-                    Console.WriteLine($"введите число от 0 до 99 или 'exit'. У вас осталось {effortsLeft} попыток");
+                    Console.WriteLine($"введите число от 0 до 99 или '/' для выхода. У вас осталось {effortsLeft} попыток");
 
                     string s = Console.ReadLine().Trim();
 
-                    if (s=="exit")
+                    if (s==@"/")
                     {
                         gameRezult = GameStepResultEnum.UserExits;
                         break;

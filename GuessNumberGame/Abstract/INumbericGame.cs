@@ -10,7 +10,5 @@ namespace GuessNumberGame.Abstract
     {
         public void Start();
 
-
-
     }
 }
